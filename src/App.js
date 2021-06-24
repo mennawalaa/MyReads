@@ -31,16 +31,27 @@ class BooksApp extends React.Component {
       }
 
       this.mapping();
-      
+
     });
   }
+  //changing shelf in side the booklist page
   shelfChange = (id, shelf) => {
     //change the book shelf
+
     const movingBook = this.state.updatedData.find((item) => item.id === id);
+    if (shelf === "none") {
+      movingBook.shelf = "none";
+
+    }
     movingBook.shelf = shelf;
+    this.state.updatedData.forEach((item) => {
+      BooksAPI.update(item, item.shelf);
+    })
+
     this.mapping();
-    
-  
+
+
+
   };
 
   addItem = (selectedItem) => {
@@ -56,14 +67,18 @@ class BooksApp extends React.Component {
         this.setState({ prevShelf: movingBook.shelf });
 
         movingBook.shelf = selectedItem.shelf;
-
+        this.state.updatedData.forEach((item) => {
+          BooksAPI.update(item, item.shelf);
+        })
         this.mapping();
       } else {
         //the data come from search not found  in the list
 
         //form a array of the old state and the new item
         const newarr = this.state.updatedData.concat(selectedItem);
-
+        newarr.forEach((item) => {
+          BooksAPI.update(item, item.shelf);
+        })
         //map the new array to the shelf states
         const currentlyReading = newarr.filter(
           (item) => item.shelf === "currentlyReading"
@@ -80,6 +95,7 @@ class BooksApp extends React.Component {
   };
 
   mapping = () => {
+
     const currentlyReading = this.state.updatedData.filter(
       (item) => item.shelf === "currentlyReading"
     );
@@ -89,7 +105,7 @@ class BooksApp extends React.Component {
       (item) => item.shelf === "wantToRead"
     );
     this.setState({ WantToReadBooks: wantto });
-    console.log("from app js",this.state.WantToReadBooks);
+
 
     const read = this.state.updatedData.filter((item) => item.shelf === "read");
     this.setState({ Read: read });

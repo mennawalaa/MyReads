@@ -19,10 +19,7 @@ class Search extends Component {
       selectedObj: {},
       missingAuthor: 'unkown auther',
       missingthumbnail: ' ',
-      read: 0,
-      wantoread: 0,
-      current: 0,
-      none: 0
+
 
     };
   }
@@ -42,7 +39,9 @@ class Search extends Component {
           this.setState({ searchResults: res });
 
           //adding shelf
-          this.shelfState();
+          const modifiedRes = this.shelfState(res);
+          this.setState({ searchResults: modifiedRes });
+
         }
       });
     }
@@ -54,15 +53,16 @@ class Search extends Component {
     Item["shelf"] = Shelf;
     this.setState({ getData: 1 });
     this.setState({ selectedObj: Item });
+    // BooksAPI.update(Item, Item.shelf);
     this.props.passAddItem(Item);
 
 
 
   }
 
-  shelfState = () => {
+  shelfState = (res) => {
     //compare search reasults with books on shelves 
-      this.state.searchResults.forEach((item) => {
+    res.forEach((item) => {
       let foundc = false;
       let foundw = false;
       let foundp = false;
@@ -112,17 +112,11 @@ class Search extends Component {
 
       }
 
+      BooksAPI.update(item, item.shelf);
 
-      let selected1 = (item.shelf === "wantToRead") ? true : false;
-      this.setState({ wantoread: selected1 });
-      let selected2 = (item.shelf === "currentlyReading") ? true : false;
-      this.setState({ current: selected2 });
-      let selected3 = (item.shelf === "read") ? true : false;
-      this.setState({ read: selected3 });
-      let selected4 = (item.shelf === "none") ? true : false;
-      this.setState({ none: selected4 });
     })
 
+    return res;
   }
 
   render() {
@@ -144,15 +138,17 @@ class Search extends Component {
                       <div className="book-shelf-changer">
                         <select onChange={e => this.getMovementData(e, item)} value={item.shelf} >
                           <option value="move">Move to...</option>
-                          <option value="currentlyReading" selected={this.state.current}>Currently Reading</option>
-                          <option value="wantToRead" selected={this.state.wantoread}>Want to Read</option>
-                          <option value="read" selected={this.state.read}>Read</option>
-                          <option value="none" selected={this.state.none}>None</option>
+                          <option value="currentlyReading">Currently Reading</option>
+                          <option value="wantToRead" >Want to Read</option>
+                          <option value="read">Read</option>
+                          <option value="none">None</option>
                         </select>
                       </div>
                     </div>
                     <div className="book-title" >{item.title}</div>
                     <div className="book-authors">{item.authors}</div>
+
+
                   </div>
                 </li>
 

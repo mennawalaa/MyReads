@@ -125,3 +125,9 @@ Read child of BookList
 1. using the function update on both componentDidMount and ComponentDidUpdate to Keep
    the initial state as well as the changes after the browser refreshes.
 2. adding a shelf information to books in Read ,current reading ,and want to read shelves.
+
+## 2nd updates
+
+1. replace the selected property with value property which is chosen const "read","current read","want to Read" in the component of each one as already the props passed to each component have one value for shelf property
+2. the value property of select depends on shelf property
+3. add option none to the main page where the book leaves the main page
