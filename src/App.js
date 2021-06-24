@@ -31,6 +31,7 @@ class BooksApp extends React.Component {
       }
 
       this.mapping();
+      
     });
   }
   shelfChange = (id, shelf) => {
@@ -38,6 +39,8 @@ class BooksApp extends React.Component {
     const movingBook = this.state.updatedData.find((item) => item.id === id);
     movingBook.shelf = shelf;
     this.mapping();
+    
+  
   };
 
   addItem = (selectedItem) => {
@@ -86,6 +89,7 @@ class BooksApp extends React.Component {
       (item) => item.shelf === "wantToRead"
     );
     this.setState({ WantToReadBooks: wantto });
+    console.log("from app js",this.state.WantToReadBooks);
 
     const read = this.state.updatedData.filter((item) => item.shelf === "read");
     this.setState({ Read: read });
